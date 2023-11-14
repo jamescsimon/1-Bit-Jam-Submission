@@ -1,0 +1,28 @@
+using UnityEngine;
+public class Companion : MonoBehaviour {
+    public Transform player; // Player object to follow
+    public float orbitSpeed = 2f; // Orbital motion speed
+    public float heightChangeSpeed = 1f; // Height change speed
+    public float maxHeightChange = 2f; // Maximum height change from the ground
+    public float lightIntensity = 1f; // Initial light intensity
+    void Update() {
+        if (lightIntensity > 0f) {
+            float deltaTime = Time.deltaTime;
+            // Orbit around the player
+            transform.RotateAround(player.position, Vector3.up, orbitSpeed * deltaTime);
+            // Cyclic height change
+            float heightOffset = Mathf.Sin(Time.time * heightChangeSpeed) * maxHeightChange;
+            Vector3 newPosition = transform.position;
+            newPosition.y = player.position.y + heightOffset;
+            transform.position = newPosition;
+        }
+        else {
+            // If light intensity is zero, stop following the player
+            Debug.Log("Companion stopped following due to zero light intensity.");
+        }
+    }
+    // Function to update light intensity 
+    public void UpdateLightIntensity(float newIntensity) {
+        lightIntensity = newIntensity;
+    }
+}
